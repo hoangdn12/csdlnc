@@ -105,6 +105,38 @@ AS
 
 SELECT * FROM V_SP
 
+/*Câu 4 STORE PROCEDUE: a) Stored Procedure Sp_1: Dùng để xóa thông tin của một sản phẩm nào đó (tức là xóa 1 bản ghi trong bảng PRODUCT)
+với mã sản phẩm được truyền vào như một tham số của Stored Procedure */ 
+CREATE PROCEDURE Sp_1 (@Id_SP NVARCHAR(15))
+AS
+BEGIN
+	DELETE FROM PRODUCT
+	WHERE MaSP = @Id_SP
+END
+
+EXECUTE Sp_1 'SP004';
+
+SELECT * FROM PRODUCT;
+
+INSERT INTO PRODUCT(MaSP, TenSP, MoTa, GiaSP, SoLuongSP) VALUES
+('SP004', N'Hoa Ly', N'Hoa Tươi', '25000', '25')
+
+DROP PROCEDURE Sp_1
+
+/*cau 4 Hiển thị tiền của đơn hàng  */
+CREATE FUNCTION Donhang (@MaDH nvarchar(15))
+RETURNS INT 
+AS
+BEGIN
+     DECLARE @tongtien INT
+	 SELECT @tongtien = sum(ThanhTien) from ORDER_DETAIL
+	
+	 WHERE MaDH = @MaDH
+	 RETURN @tongtien
+END
+
+select dbo.Donhang('DH001') as ThanhTien
+
  /* câu 5 Tạo procdure in ra  các đơn hàng  */
 
  CREATE PROC list_Order
