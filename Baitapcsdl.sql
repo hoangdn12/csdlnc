@@ -151,16 +151,4 @@ select dbo.Donhang('DH001') as ThanhTien
 
 
 
- /*cau 4 Hiển thị tiền của đơn hàng  */
-CREATE FUNCTION Donhang (@MaDH nvarchar(15))
-RETURNS INT 
-AS
-BEGIN
-     DECLARE @tongtien INT
-	 SELECT @tongtien = sum(ThanhTien) from ORDER_DETAIL
-	
-	 WHERE MaDH = @MaDH
-	 RETURN @tongtien
-END
 
-select dbo.Donhang('DH001') as ThanhTien
