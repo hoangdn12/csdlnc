@@ -44,13 +44,13 @@ CREATE TABLE ORDER_DETAIL(
 INSERT INTO CUSTOMER(MaKH, HoTen, Email, Sđt, DiaChi) VALUES
 	('KH001', N'Lê Thị Xuân',	 'xuan@gmail.com', '0123456789', N'Liên Chiểu'),
 	('KH002', N'Lê Văn Bình',	 'binh@gmail.com', '0123456788', N'Hải Châu'),
-	('KH003', N'Nguyễn Văn Tấn', 'tan@gmail.com',  '0123456787', N'Liên Chiểu'),
+	('KH003', N'Nguyễn Văn Tấn', 	 'tan@gmail.com',  '0123456787', N'Liên Chiểu'),
 	('KH004', N'Thái Thị Hiền',	 'hien@gmail.com', '0123456786', N'Sơn Trà'),
-	('KH005', N'Đinh Văn Ngọc',  'ngoc@gmail.com', '0123456785', N'Ngũ Hành Sơn')
+	('KH005', N'Đinh Văn Ngọc',  	 'ngoc@gmail.com', '0123456785', N'Ngũ Hành Sơn')
 
 INSERT INTO PRODUCT(MaSP, TenSP, MoTa, GiaSP, SoLuongSP) VALUES
 	('SP001', N'Hoa Hồng',		 N'Hoa Tươi', '15000', '20'),
-	('SP002', N'Hoa Huệ Chuông', N'Hoa Khô',  '20000', '15'),
+	('SP002', N'Hoa Huệ Chuông',     N'Hoa Khô',  '20000', '15'),
 	('SP003', N'Hoa Anh Đào',	 N'Hoa Khô',  '60000', '10'),
 	('SP004', N'Hoa Ly',		 N'Hoa Tươi', '25000', '25'),
 	('SP005', N'Hoa Sen Mini',	 N'Hoa Tươi', '70000', '12')
@@ -71,17 +71,8 @@ INSERT INTO ORDER_DETAIL(MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien) 
 	('CTDH02', 'SP001', 'DH002', '10', '15000', '155000'),
 	('CTDH03', 'SP005', 'DH003', '2',  '70000', '142000'),
 	('CTDH04', 'SP003', 'DH004', '3',  '60000', '185000'),
-	('CTDH05', 'SP002', 'DH005', '10', '20000',	'205000')
+	('CTDH05', 'SP002', 'DH005', '10', '20000', '205000')
 	
-	
-/*Tạo một khung nhìn có tên là V_KhachHang để lấy được thông tin của tất cả khách hàng có địa chỉ là "Liên Chiểu"
-và đã order*/
-CREATE VIEW V_KHACHHANG
-AS
-	SELECT * FROM CUSTOMER 
-	WHERE DiaChi = N'Liên Chiểu' AND MaKH IN (SELECT MaKH FROM ORDER_SP)
-	
-SELECT * FROM V_KHACHHANG
 
 
 /*câu 2 tao dơn  hàng có phuongư thức  thanh toán là " thanh  toán online " và tổng tiền > 75000 */
@@ -94,6 +85,25 @@ where   TongTien >'75000' and   PM.TenPhuongThucTT = N'Thanh Toán online'
 Select OD.MaKH ,OD.TrangThaiDatHang, CM.DiaChi From CUSTOMER CM JOIN ORDER_SP OD 
 ON OD.MaKH = CM.MaKH 
 where  CM.DiaChi = N'Ngũ Hành Sơn'  and  OD.TrangThaiDatHang = N'Đang giao hàng';
+
+/*Câu 3 Tạo VIEW: có tên là V_KhachHang để lấy được thông tin của tất cả khách hàng có địa chỉ là "Liên Chiểu"
+và TrangThaiDatHang = 'Giao hàng thành công*/
+CREATE VIEW V_KHACHHANG
+AS
+	SELECT * FROM CUSTOMER 
+	WHERE DiaChi = N'Liên Chiểu' AND MaKH IN (SELECT MaKH FROM ORDER_SP WHERE TrangThaiDatHang = N'Giao hàng thành công')
+	
+SELECT * FROM V_KHACHHANG
+
+/*Tạo khung nhìn hiển thị MaSP, TenSP của sản phẩm được bán nhiều hơn 1 lần*/
+CREATE VIEW V_SP
+AS
+	SELECT P.MaSP, TenSP , COUNT(OD.MaSP) AS SoLuong FROM PRODUCT AS P
+	JOIN ORDER_DETAIL AS OD ON P.MaSP = OD.MaSP
+	GROUP BY P.MaSP, TenSP
+	HAVING COUNT(OD.MaSP) > 1
+
+SELECT * FROM V_SP
 
  /* câu 5 Tạo procdure in ra  các đơn hàng  */
 
