@@ -9,7 +9,7 @@ Lý Thị Phương Yến
 
 Lê Hạ Uyên
 
-Hà Ngọc Bỏa Trâm
+Hà Ngọc Bảo Trâm
 
 Đặng Thị Ngọc Vi
 
