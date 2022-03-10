@@ -75,13 +75,13 @@ INSERT INTO ORDER_DETAIL(MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien) 
 	
 
 
-/*câu 2 tao dơn  hàng có phuongư thức  thanh toán là " thanh  toán online " và tổng tiền > 75000 */
+/*câu 2 liệt kê những đơn hàng  có phương thức  thanh toán là " thanh  toán online " và tổng tiền > 75000 */
 Select PM.TenPhuongThucTT ,  OD.TongTien from ORDER_SP OD inner join PAYMENT PM 
 on OD.MaPhuongThucTT = PM.MaPhuongThucTT 
 where   TongTien >'75000' and   PM.TenPhuongThucTT = N'Thanh Toán online'
 
 
-/* tạo đơn hàng có trạng thái đặt hàng là 'Đang Giao Hàng " và Khachs hàng có địa chỉ ở "Ngũ Hành Sơn " */
+/* liệt kê  đơn hàng có trạng thái đặt hàng là 'Đang Giao Hàng " và Khách hàng có địa chỉ ở "Ngũ Hành Sơn " */
 Select OD.MaKH ,OD.TrangThaiDatHang, CM.DiaChi From CUSTOMER CM JOIN ORDER_SP OD 
 ON OD.MaKH = CM.MaKH 
 where  CM.DiaChi = N'Ngũ Hành Sơn'  and  OD.TrangThaiDatHang = N'Đang giao hàng';
