@@ -123,7 +123,7 @@ INSERT INTO PRODUCT(MaSP, TenSP, MoTa, GiaSP, SoLuongSP) VALUES
 
 DROP PROCEDURE Sp_1
 
-/*cau 4 Hiển thị tiền của đơn hàng  */
+/*cau 5 Hiển thị tiền của đơn hàng  */
 CREATE FUNCTION Donhang (@MaDH nvarchar(15))
 RETURNS INT 
 AS
