@@ -76,7 +76,7 @@ INSERT INTO ORDER_DETAIL(MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien) 
 
 
 /*câu 2 liệt kê những đơn hàng  có phương thức  thanh toán là " thanh  toán online " và tổng tiền > 75000 */
-Select PM.TenPhuongThucTT ,  OD.TongTien from ORDER_SP OD inner join PAYMENT PM 
+Select OD.MaDH, PM.TenPhuongThucTT,  OD.TongTien from ORDER_SP OD inner join PAYMENT PM 
 on OD.MaPhuongThucTT = PM.MaPhuongThucTT 
 where   TongTien >'75000' and   PM.TenPhuongThucTT = N'Thanh Toán online'
 
@@ -86,7 +86,7 @@ Select OD.MaKH ,OD.TrangThaiDatHang, CM.DiaChi From CUSTOMER CM JOIN ORDER_SP OD
 ON OD.MaKH = CM.MaKH 
 where  CM.DiaChi = N'Ngũ Hành Sơn'  and  OD.TrangThaiDatHang = N'Đang giao hàng';
 
-/*Câu 3Tạo VIEW: lấy thông tin của tất cả khách hàng có địa chỉ là "Liên Chiểu" và TrangThaiDatHang = 'Giao hàng thành công*/
+/*Câu 3 Tạo VIEW: lấy thông tin của tất cả khách hàng có địa chỉ là "Liên Chiểu" và TrangThaiDatHang = 'Giao hàng thành công*/
 CREATE VIEW V_KHACHHANG
 AS
 	SELECT DISTINCT C.MaKH, HoTen, Email, Sđt, DiaChi, O.TrangThaiDatHang  FROM CUSTOMER AS C
