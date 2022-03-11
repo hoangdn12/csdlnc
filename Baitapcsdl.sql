@@ -156,7 +156,7 @@ END
 select dbo.Donhang('DH001') as ThanhTien
 
 
-/*Câu 5: -- Thống kê tổng số lượng sản phẩm đã bán và số lượng còn lại là bao nhiêu?
+/*Câu 5: -- Thống kê tổng số lượng sản phẩm đã bán và số lượng còn lại là bao nhiêu?*/
 
 Create function fn_tongsoluongban (@MaSP nvarchar(10))
 Returns int 
