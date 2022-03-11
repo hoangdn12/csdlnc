@@ -151,6 +151,26 @@ END
 
 select dbo.Donhang('DH001') as ThanhTien
 
+/*Câu 5: -- Thống kê tổng số lượng sản phẩm đã bán và số lượng còn lại là bao nhiêu?
+
+Create function fn_tongsoluongban (@MaSP nvarchar(10))
+Returns int 
+As
+Begin
+     Declare @soluongban int
+	 Select @soluongban = sum(cthd.SoLuongSPMua) 
+	 From ORDER_DETAIL aS cthd , PRODUCT as sp
+	 Where cthd.SoLuongSPMua = sp.SoLuongSP and cthd.MaSP = @MaSP
+	 Group By sp.MaSP
+	 Return @soluongban
+END
+Go
+
+Select DISTINCT  cthd.MaSP, sp.SoLuongSP,  dbo.fn_tongsoluongban('SP001') 'Số Lượng Bán' , (sp.SoLuongSP - dbo.fn_tongsoluongban('SP001')) 'Số Lượng Còn Lại'
+From ORDER_DETAIL as cthd, PRODUCT as sp
+Where cthd.MaSP = 'SP001' and sp.MaSP = cthd.MaSP
+
+
  
 
 
