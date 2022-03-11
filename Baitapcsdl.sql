@@ -86,24 +86,28 @@ Select OD.MaKH ,OD.TrangThaiDatHang, CM.DiaChi From CUSTOMER CM JOIN ORDER_SP OD
 ON OD.MaKH = CM.MaKH 
 where  CM.DiaChi = N'Ngũ Hành Sơn'  and  OD.TrangThaiDatHang = N'Đang giao hàng';
 
-/*Câu 3 Tạo VIEW: có tên là V_KhachHang để lấy được thông tin của tất cả khách hàng có địa chỉ là "Liên Chiểu"
-và TrangThaiDatHang = 'Giao hàng thành công*/
+/*Câu 3Tạo VIEW: lấy thông tin của tất cả khách hàng có địa chỉ là "Liên Chiểu" và TrangThaiDatHang = 'Giao hàng thành công*/
 CREATE VIEW V_KHACHHANG
 AS
-	SELECT * FROM CUSTOMER 
-	WHERE DiaChi = N'Liên Chiểu' AND MaKH IN (SELECT MaKH FROM ORDER_SP WHERE TrangThaiDatHang = N'Giao hàng thành công')
+	SELECT DISTINCT C.MaKH, HoTen, Email, Sđt, DiaChi, O.TrangThaiDatHang  FROM CUSTOMER AS C
+	JOIN ORDER_SP AS O ON C.MaKH = O.MaKH
+	WHERE DiaChi = N'Liên Chiểu' AND TrangThaiDatHang = N'Giao hàng thành công'
 	
 SELECT * FROM V_KHACHHANG
 
-/*Tạo VIEW: có tên V_SP hiển thị MaSP, TenSP của sản phẩm được bán nhiều hơn 1 lần*/
+DROP VIEW V_KHACHHANG
+
+/*Tạo VIEW: lấy thông tin của tất cả sản phẩm có mô tả là 'Hoa Tươi' và số lượng sản phẩm mua > 5*/
 CREATE VIEW V_SP
 AS
-	SELECT P.MaSP, TenSP , COUNT(OD.MaSP) AS SoLuong FROM PRODUCT AS P
+	SELECT P.*, OD.SoLuongSPMua FROM PRODUCT AS P
 	JOIN ORDER_DETAIL AS OD ON P.MaSP = OD.MaSP
-	GROUP BY P.MaSP, TenSP
-	HAVING COUNT(OD.MaSP) > 1
-
+	WHERE MoTa = N'Hoa Tươi' AND SoLuongSPMua > 5
+	
 SELECT * FROM V_SP
+
+DROP VIEW V_SP
+
 
 /*Câu 4 STORE PROCEDUE: a) Stored Procedure Sp_1: Dùng để xóa thông tin của một sản phẩm nào đó (tức là xóa 1 bản ghi trong bảng PRODUCT)
 với mã sản phẩm được truyền vào như một tham số của Stored Procedure */ 
