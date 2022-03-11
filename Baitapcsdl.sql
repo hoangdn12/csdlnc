@@ -123,6 +123,20 @@ INSERT INTO PRODUCT(MaSP, TenSP, MoTa, GiaSP, SoLuongSP) VALUES
 
 DROP PROCEDURE Sp_1
 
+ /* câu 4 Tạo procdure in ra  các đơn hàng  */
+
+ CREATE PROC list_Order
+ @MaDH NVARCHAR(15)
+ AS
+ BEGIN 
+ SELECT * from ORDER_SP
+ END
+ GO
+
+ exec list_Order 'DH005'
+
+
+
 /*cau 5 Hiển thị tiền của đơn hàng  */
 CREATE FUNCTION Donhang (@MaDH nvarchar(15))
 RETURNS INT 
@@ -137,17 +151,7 @@ END
 
 select dbo.Donhang('DH001') as ThanhTien
 
- /* câu 5 Tạo procdure in ra  các đơn hàng  */
-
- CREATE PROC list_Order
- @MaDH NVARCHAR(15)
- AS
- BEGIN 
- SELECT * from ORDER_SP
- END
- GO
-
- exec list_Order 'DH005'
+ 
 
 
 
