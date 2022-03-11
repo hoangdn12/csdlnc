@@ -95,7 +95,7 @@ AS
 	
 SELECT * FROM V_KHACHHANG
 
-/*Tạo khung nhìn hiển thị MaSP, TenSP của sản phẩm được bán nhiều hơn 1 lần*/
+/*Tạo VIEW: có tên V_SP hiển thị MaSP, TenSP của sản phẩm được bán nhiều hơn 1 lần*/
 CREATE VIEW V_SP
 AS
 	SELECT P.MaSP, TenSP , COUNT(OD.MaSP) AS SoLuong FROM PRODUCT AS P
