@@ -165,7 +165,7 @@ Begin
      Declare @soluongban int
 	 Select @soluongban = sum(cthd.SoLuongSPMua) 
 	 From ORDER_DETAIL aS cthd , PRODUCT as sp
-	 Where cthd.SoLuongSPMua = sp.SoLuongSP and cthd.MaSP = @MaSP
+	 Where cthd.MaSP = sp.MaSP and cthd.MaSP = @MaSP
 	 Group By sp.MaSP
 	 Return @soluongban
 END
