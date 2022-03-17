@@ -96,3 +96,25 @@ AS
 
 select * from ORDER_SP
 UPDATE  ORDER_SP SET MaKH = 'KH001' WHERE MaDH = 'DH001'
+
+--Vi
+/*Tạo TRIGGER: Khi thực hiện thêm bản ghi vào bảng PRODUCT đảm bảo cột SoLuongSP không nhỏ hơn 5*/
+CREATE TRIGGER KiemTra_SoLuongSP ON PRODUCT
+FOR INSERT
+AS
+	BEGIN
+		IF EXISTS (SELECT * FROM inserted WHERE SoLuongSP < 5)
+		BEGIN 
+			PRINT N'Số lượng sản phẩm không thể nhỏ hơn 5';
+			ROLLBACK 
+		END
+	END
+
+
+INSERT INTO PRODUCT VALUES ('SP006', N'Hoa Hướng Dương', N'Hoa Tươi', '130000', '4')
+
+INSERT INTO PRODUCT VALUES ('SP006', N'Hoa Hướng Dương', N'Hoa Tươi', '130000', '17')
+
+SELECT * FROM PRODUCT
+
+DROP TRIGGER KiemTra_SoLuongSP
