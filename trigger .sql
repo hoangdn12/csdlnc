@@ -118,3 +118,23 @@ INSERT INTO PRODUCT VALUES ('SP006', N'Hoa Hướng Dương', N'Hoa Tươi', '13
 SELECT * FROM PRODUCT
 
 DROP TRIGGER KiemTra_SoLuongSP
+
+
+--Yến
+-- trigger: Tạo một update nhằm đảm bảo khi tiến hành cập nhập dữ  liệu thì PhiTT mới khác phí thanh toán cũ 
+CREATE TRIGGER checkPTT 
+on PAYMENT 
+FOR UPDATE 
+AS 
+  BEGIN 
+  If EXISTS (SELECT * FROM inserted id inner join  deleted dl 
+  on id.MaPhuongThucTT = dl.MaPhuongThucTT 
+  where dl.PhiTT = id.PhiTT )
+   BEGIN 
+    PRINT N' Phí thanh toán không thỏa mãn với điều kiện';
+	ROLLBACK TRANSACTION ;
+	END
+	END
+GO 
+UPDATE PAYMENT SET PhiTT = '3000' WHERE MaPhuongThucTT = 'PTTT1'
+select *  from PAYMENT 
