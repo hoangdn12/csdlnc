@@ -67,10 +67,10 @@ INSERT INTO ORDER_SP(MaDH, MaKH, MaPhuongThucTT, NgayDat, TrangThaiDatHang, Tong
 	('DH005', 'KH005', 'PTTT1', '2022/03/08', N'Đang giao hàng',	   '200000')
 go
 INSERT INTO ORDER_DETAIL(MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien) VALUES
-	('CTDH01', 'SP001', 'DH001', '5',  '15000', '75000'),
-	('CTDH02', 'SP001', 'DH002', '10', '15000', '155000'),
-	('CTDH03', 'SP005', 'DH003', '2',  '70000', '142000'),
-	('CTDH04', 'SP003', 'DH004', '3',  '60000', '185000'),
+	('CTDH01', 'SP001', 'DH002', '5',  '15000', '75000'),
+	('CTDH02', 'SP001', 'DH004', '10', '15000', '155000'),
+	('CTDH03', 'SP005', 'DH005', '2',  '70000', '142000'),
+	('CTDH04', 'SP003', 'DH002', '3',  '60000', '185000'),
 	('CTDH05', 'SP002', 'DH005', '10', '20000', '205000')
 	
 --Hoàng
@@ -138,3 +138,30 @@ AS
 GO 
 UPDATE PAYMENT SET PhiTT = '3000' WHERE MaPhuongThucTT = 'PTTT1'
 select *  from PAYMENT 
+
+
+--Trâm
+/* TRIGGER: Tạo một Trigger không cho phép xoá nhiều hơn 1 đơn hàng trong bảng ORDERS */
+CREATE TRIGGER DELETE_DONHANG 
+ON ORDERS
+FOR DELETE
+AS
+BEGIN
+	IF ((SELECT COUNT (*) FROM DELETED) > 1)
+	BEGIN
+		PRINT N'Không thể xoá nhiều hơn 1 đơn hàng!!'
+		ROLLBACK TRANSACTION
+	END
+END
+
+SELECT * FROM ORDERS;
+
+DELETE FROM ORDERS WHERE MaDH = 'DH001';
+
+DELETE FROM ORDERS WHERE MaDH = 'DH001' OR MaDH = 'DH003';
+
+INSERT INTO ORDERS(MaDH, MaKH, MaPT_TT, NgayDatHang, TrangThaiDatHang, TongTien) VALUES
+   ('DH001','KH001','PTTT1','2022/02/25','Giao hang thanh cong','120000')
+
+DROP TRIGGER DELETE_DONHANG 
+
