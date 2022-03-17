@@ -72,3 +72,27 @@ INSERT INTO ORDER_DETAIL(MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien) 
 	('CTDH03', 'SP005', 'DH003', '2',  '70000', '142000'),
 	('CTDH04', 'SP003', 'DH004', '3',  '60000', '185000'),
 	('CTDH05', 'SP002', 'DH005', '10', '20000', '205000')
+	
+--Hoàng
+--Trigger ngăn không cho xoá dữ liệu bảng ORDER_DETAIL
+CREATE TRIGGER Trigger_check_delete_OrderDetail ON order_detail
+FOR delete
+AS 
+	print 'Can not delete data'
+	rollback transaction
+
+delete ORDER_DETAI
+--Không cho cập nhập đơn ở trạng thái đã nhận hàng 
+CREATE TRIGGER Trigger_check_update_order ON order_SP
+FOR update
+AS 
+	if ( (SELECT 1 FROM inserted
+		WHERE MaDH IN (select MaDH from ORDER_SP 
+						where TrangThaiDatHang = N'Giao hàng thành công')) > 0 )
+	BEGIN
+		PRINT 'CAN NOT EDIT BECAUSE N"Giao hàng thành công" '
+		ROLLBACK TRANSACTION
+	END
+
+select * from ORDER_SP
+UPDATE  ORDER_SP SET MaKH = 'KH001' WHERE MaDH = 'DH001'
