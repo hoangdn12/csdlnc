@@ -226,3 +226,28 @@ select * from PRODUCT where MaSP = 'SP004'
 Insert into ORDER_DETAIL(MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien)
 Values ('CTDH006','SP004', 'DH001', 15, 15000.00, 85000.00)
 
+--UYEN
+--- Tao delete trigger khong cho phep xoa gia tien voi san pham co gia < 500000
+CREATE TRIGGER Tri_DeProduct                 
+ON dbo.PRODUCT
+AFTER DELETE
+AS 
+BEGIN
+    DECLARE @Price INT = 0
+	SELECT @Price = COUNT(*) FROM Deleted det
+	WHERE det.GiaSP > 500000
+	--Neu co sl sp > 500k bi xoa di thi price > 0 => fail
+	IF (@Price > 0)
+	BEGIN
+	    PRINT 'Khong the xoa san pham co gia tien tren 500000 !!!'
+		PRINT ''
+		ROLLBACK TRANSACTION
+	END
+END
+GO
+SELECT *  FROM dbo.PRODUCT
+INSERT INTO PRODUCT VALUES('SP006', N'Hoa baby', N'Hoa khô', 550000, 30)
+DELETE FROM dbo.PRODUCT WHERE MaSP = 'SP006'
+UPDATE dbo.PRODUCT SET GiaSP = 400000 WHERE MaSP = 'SP006'
+GO
+
