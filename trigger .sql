@@ -165,3 +165,27 @@ INSERT INTO ORDERS(MaDH, MaKH, MaPT_TT, NgayDatHang, TrangThaiDatHang, TongTien)
 
 DROP TRIGGER DELETE_DONHANG 
 
+--Long
+--Tạo trigger cập nhật số lượng tồn kho của các mặt hàng bất kì được mua.
+Create trigger trg_CapNhatSoLuong
+On ORDER_DETAIL
+After insert
+as 
+  begin
+    --lấy thông tin vừa insert
+	Declare @MaSP nvarchar(15)
+	Declare @Soluongmua int
+	Select @MaSP = MaSP, @Soluongmua = SoLuongSPMua From inserted
+
+	-- Cập nhật giảm số lượng tồn của sản phẩm
+	Update PRODUCT
+	Set SoLuongSP = SoLuongSP - @Soluongmua
+	Where MaSP = @MaSP
+	End
+Go
+
+select * from ORDER_DETAIL where MaDH = 'DH001'
+select * from PRODUCT where MaSP = 'SP004'
+
+Insert into ORDER_DETAIL(MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien)
+Values ('CTDH006','SP004', 'DH001', 15, 15000.00, 85000.00)
