@@ -98,14 +98,26 @@ INSERT INTO ORDER_DETAIL VALUES
 	set SoLuongSP = 100
 	where MaSP = 'SP004'
 --Hoàng
---Trigger ngăn không cho xoá dữ liệu bảng ORDER_DETAIL
-CREATE TRIGGER Trigger_check_delete_OrderDetail ON order_detail
-FOR delete
-AS 
-	print 'Can not delete data'
-	rollback transaction
-
-delete ORDER_DETAI
+--- Tao update trigger khi cap nhap so luong san pham thi phai lon hon so luong san pham cu
+CREATE TRIGGER Trg_UpProduct
+ON dbo.PRODUCT
+AFTER UPDATE
+AS
+BEGIN
+    IF EXISTS(SELECT * FROM Inserted ist JOIN Deleted det
+			  ON det.MaSP = ist.MaSP
+			  WHERE det.SoLuongSP > ist.SoLuongSP)
+	BEGIN
+	    PRINT N'Số lượng hàng nhập vào không được nhỏ hơn trong kho'
+		PRINT ''
+		ROLLBACK TRANSACTION
+	END
+END
+GO	
+SELECT * FROM dbo.PRODUCT
+INSERT INTO PRODUCT VALUES('SP006', 'Hoa Hướng Dương', 'Hoa Khô', 350000, 30)
+UPDATE dbo.PRODUCT SET SoLuongSP = 20 WHERE MaSP = 'SP006'
+GO 
 --Không cho cập nhập đơn ở trạng thái đã nhận hàng 
 CREATE TRIGGER Trigger_check_update_order ON order_SP
 FOR update
