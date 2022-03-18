@@ -72,7 +72,31 @@ INSERT INTO ORDER_DETAIL(MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien) 
 	('CTDH03', 'SP005', 'DH005', '2',  '70000', '142000'),
 	('CTDH04', 'SP003', 'DH002', '3',  '60000', '185000'),
 	('CTDH05', 'SP002', 'DH005', '10', '20000', '205000')
+--Chi
+-- cập nhật số lượng hàng trong bảng sản phẩm sau khi đặt hàng hoặc cập nhật
+CREATE TRIGGER trg_DatHang ON ORDER_DETAIL AFTER INSERT AS 
+BEGIN
+	UPDATE PRODUCT
+	SET SoLuongSP = SoLuongSP - (SELECT SoLuongSPMUA
+		                         FROM inserted
+		                         WHERE MaSP = PRODUCT.MaSP)
+	FROM PRODUCT
+	JOIN inserted ON PRODUCT.MaSP = inserted.MaSP
+END
+GO
+
+
+select * from ORDER_SP
+select * from ORDER_DETAIL
+select * from PRODUCT
+
+INSERT INTO ORDER_DETAIL VALUES
+    --MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien
+	('CTDH08', 'SP004', 'DH005', '5',  '55000', '275000');
 	
+	UPDATE PRODUCT 
+	set SoLuongSP = 100
+	where MaSP = 'SP004'
 --Hoàng
 --Trigger ngăn không cho xoá dữ liệu bảng ORDER_DETAIL
 CREATE TRIGGER Trigger_check_delete_OrderDetail ON order_detail
@@ -189,3 +213,4 @@ select * from PRODUCT where MaSP = 'SP004'
 
 Insert into ORDER_DETAIL(MaCTDH, MaSP, MaDH, SoLuongSPMua, GiaSPMua, ThanhTien)
 Values ('CTDH006','SP004', 'DH001', 15, 15000.00, 85000.00)
+
